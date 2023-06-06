@@ -19,10 +19,9 @@ ActiveRecord::Schema.define(version: 2023_06_05_133506) do
     t.string "gender"
     t.integer "phone_number"
     t.string "email"
-    t.integer "course_id"
+    t.string "course_title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["course_id"], name: "index_applications_on_course_id"
   end
 
   create_table "courses", force: :cascade do |t|
@@ -44,6 +43,5 @@ ActiveRecord::Schema.define(version: 2023_06_05_133506) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "applications", "courses"
   add_foreign_key "courses", "users"
 end

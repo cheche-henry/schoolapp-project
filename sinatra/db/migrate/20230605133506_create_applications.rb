@@ -7,7 +7,7 @@ class CreateApplications < ActiveRecord::Migration[6.1]
       t.string :gender
       t.integer :phone_number
       t.string :email
-      t.references :course, foreign_key: true
+      t.string :course_title
       t.timestamps
     end
   end

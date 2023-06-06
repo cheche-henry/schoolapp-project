@@ -1,28 +1,36 @@
-class ApplicationsController < ApplicationController 
-    get '/applications' do
-      "Hello, World! Welcome to applications"
-    end
+class ApplicationsController < ApplicationController
+  get '/applications' do
+    applications = Application.all
+    applications.to_json()
+  end
 
-    post '/applications/addapplication' do
-      _name = params[:name]
-      _email = params[:email]
-      _rank = params[:rank]
-      _password = params[:password]
-  
-      if _name.present? && _email.present? && _rank.present? && _password.present?
-          user = User.create(name: _name, email: _email, rank: _rank, password: _password)
-          if user
-            message = { success: "User has been created successfully" }
-          else
-            status 406
-            message = { error: "Error creating the user" }
-          end
+  post '/applications/addapplication' do
+    _firstname = params[:firstname]
+    _secondname = params[:secondname]
+    _date_of_birth = params[:date_of_birth]
+    _gender = params[:gender]
+    _phone_number = params[:phone_number]
+    _email = params[:email]
+    _course_title = params[:course_title]
+
+    if _firstname.present? && _secondname.present? && _date_of_birth.present? && _gender.present? && _phone_number.present? && _email.present? && _course_title.present?
+      if Course.exists?(title: _course_title)
+        application = Application.create(firstname: _firstname, secondname: _secondname, date_of_birth: _date_of_birth, gender: _gender, phone_number: _phone_number, email: _email, course_title: _course_title)
+        if application
+          message = { success: "Application has been sent successfully" }
+        else
+          status 406
+          message = { error: "Error sending the application" }
         end
       else
         status 406
-        message = { error: "All values are required" }
+        message = { error: "Invalid course title" }
       end
-  
-      message.to_json()
+    else
+      status 406
+      message = { error: "All values are required" }
     end
+
+    message.to_json()
   end
+end
