@@ -21,5 +21,11 @@ class SessionController < ApplicationController
   
       message.to_json()
     end
+
+    post '/users/logout' do
+      session.delete :user_id
+      message = { success: "User logged out successfully" }
+      message.to_json()
+    end
   end
   
