@@ -1,7 +1,7 @@
 class CoursesController < ApplicationController
   get '/courses' do
     courses = Course.all
-    courses.to_json()
+    courses.to_json(include: :user)
   end
 
   post '/courses/addcourse' do

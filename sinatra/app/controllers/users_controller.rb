@@ -37,7 +37,7 @@ class UsersController < ApplicationController
       user.destroy
       message = { success: "User has been deleted successfully" }
     else
-      status 404
+      status 406
       message = { error: "User not found" }
     end
     message.to_json()
@@ -63,5 +63,17 @@ class UsersController < ApplicationController
     end
     message.to_json()
   end
+  
 
+  get '/currentuser' do
+    user = User.find_by(id: session[:user_id])
+    if user
+      { user: user }.to_json()
+    else
+      status 404
+      message = { error: "Not logged in" }
+      message.to_json()
+    end
+  end
+  
 end
