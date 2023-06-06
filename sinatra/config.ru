@@ -1,6 +1,7 @@
 require_relative "./config/environment"
 
 # Our application
+use StudentsController
 use CoursesController
 use ApplicationsController
 use UsersController
