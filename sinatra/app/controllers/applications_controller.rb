@@ -33,4 +33,16 @@ class ApplicationsController < ApplicationController
 
     message.to_json()
   end
+
+  delete '/applications/delete/:id' do
+    application = Application.find_by(id: params[:id])
+    if application
+      application.destroy
+      message = { success: "Application has been deleted successfully" }
+    else
+      status 404
+      message = { error: "Application not found" }
+    end
+    message.to_json()
+  end
 end

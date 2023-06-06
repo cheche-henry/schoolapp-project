@@ -12,12 +12,17 @@ class CoursesController < ApplicationController
 
     if _title.present? && _description.present? && _image.present? && _user_id.present?
       if User.exists?(id: _user_id)
-        course = Course.create(title: _title, description: _description, image: _image, user_id: _user_id)
-        if course
-          message = { success: "Course has been created successfully" }
-        else
+        if Course.exists?(title: _title)
           status 406
-          message = { error: "Error creating the course" }
+          message = { error: "A course with the same title already exists" }
+        else
+          course = Course.create(title: _title, description: _description, image: _image, user_id: _user_id)
+          if course
+            message = { success: "Course has been created successfully" }
+          else
+            status 406
+            message = { error: "Error creating the course" }
+          end
         end
       else
         status 406
@@ -28,6 +33,18 @@ class CoursesController < ApplicationController
       message = { error: "All values are required" }
     end
 
+    message.to_json()
+  end
+
+  delete '/courses/delete/:id' do
+    course = Course.find_by(id: params[:id])
+    if course
+      course.destroy
+      message = { success: "Course has been deleted successfully" }
+    else
+      status 404
+      message = { error: "Course not found" }
+    end
     message.to_json()
   end
 end
