@@ -1,0 +1,23 @@
+#logo {
+  font-size: 20px;
+}
+#logo span {
+  color: blue;
+}
+#navigation {
+  padding: 20px;
+  font-weight: bold;
+}
+#navbarNavDropdown {
+  margin-right: 50px;
+}
+#navlist li {
+  margin-right: 30px;
+}
+#navlist li a:hover {
+  box-shadow: 0px 0px 5px blue;
+  transform: scale(1.005);
+  transition: all 0.3s ease-in-out;
+  color: white;
+  background-color: blue;
+}
