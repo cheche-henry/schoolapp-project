@@ -30,4 +30,38 @@ class UsersController < ApplicationController
 
     message.to_json()
   end
+
+  delete '/users/delete/:id' do
+    user = User.find_by(id: params[:id])
+    if user
+      user.destroy
+      message = { success: "User has been deleted successfully" }
+    else
+      status 404
+      message = { error: "User not found" }
+    end
+    message.to_json()
+  end
+
+
+  patch '/users/changepassword/:id' do
+    user = User.find_by(id: params[:id])
+    if user
+      current_password = params[:current_password]
+      new_password = params[:new_password]
+
+      if user.authenticate(current_password)
+        user.update(password: new_password)
+        message = { success: "Password has been changed successfully" }
+      else
+        status 406
+        message = { error: "Incorrect current password" }
+      end
+    else
+      status 404
+      message = { error: "User not found" }
+    end
+    message.to_json()
+  end
+
 end
