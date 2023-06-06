@@ -17,9 +17,10 @@ class ApplicationsController < ApplicationController
       if Course.exists?(title: _course_title)
         application = Application.create(firstname: _firstname, secondname: _secondname, date_of_birth: _date_of_birth, gender: _gender, phone_number: _phone_number, email: _email, course_title: _course_title)
         if application
+          status 201
           message = { success: "Application has been sent successfully" }
         else
-          status 406
+          status 500
           message = { error: "Error sending the application" }
         end
       else
@@ -27,7 +28,7 @@ class ApplicationsController < ApplicationController
         message = { error: "Invalid course title" }
       end
     else
-      status 406
+      status 400
       message = { error: "All values are required" }
     end
 
@@ -39,6 +40,7 @@ class ApplicationsController < ApplicationController
       application = Application.find_by(id: params[:id])
       if application
         application.destroy
+        status 200
         message = { success: "Application has been deleted successfully" }
       else
         status 404

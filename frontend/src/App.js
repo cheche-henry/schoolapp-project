@@ -5,6 +5,7 @@ import Contact from './components/Contact';
 import About from './components/About';
 import Layout from "./components/layout/Layout";
 import Login from './components/Login';
+import Dashboard from './components/Dashboard';
 function App() {
 
 
@@ -16,6 +17,7 @@ function App() {
           <Route path="about" element={<About />} />
           <Route path="account" element={<Login />} />
           <Route path="contactus" element={<Contact />} />
+          <Route path="contactus" element={<Dashboard/>} />
         </Route>
       </Routes>
     </BrowserRouter>
