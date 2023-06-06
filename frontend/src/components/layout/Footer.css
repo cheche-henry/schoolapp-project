@@ -1,0 +1,9 @@
+.text-container {
+  max-width: 100%;
+}
+
+.text-container h2,
+.text-container h5,
+.text-container p {
+  max-width: 100%;
+}
