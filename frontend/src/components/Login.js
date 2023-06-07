@@ -27,14 +27,14 @@ function Login() {
                 {/* Email input */}
                 <div className="form-outline mb-4">
                   <label className="form-label">Email address</label>
-                  <input onChange={(e) => setEmail(e.target.value)} type="email" className="form-control form-control-lg"
+                  <input required onChange={(e) => setEmail(e.target.value)} type="email" className="form-control form-control-lg"
                     placeholder="Enter email address" />
                 </div>
 
                 {/* Password input */}
                 <div className="form-outline mb-3">
                   <label className="form-label">Password</label>
-                  <input onChange={(e) => setPassword(e.target.value)} type="password" className="form-control form-control-lg"
+                  <input required onChange={(e) => setPassword(e.target.value)} type="password" className="form-control form-control-lg"
                     placeholder="Enter password" />
                 </div>
                 <div className="text-center text-lg-start mt-4 pt-2">

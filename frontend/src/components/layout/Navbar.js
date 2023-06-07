@@ -47,7 +47,7 @@ function Navbar() {
                 {courses &&
                   courses.map((course) => (
                     <li key={course.id}>
-                      <a className="dropdown-item">{course.title}</a>
+                      <Link to={`apply/${course.id}`} className="dropdown-item">{course.title}</Link>
                     </li>
                   ))}
               </ul>
