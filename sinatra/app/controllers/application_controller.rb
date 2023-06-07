@@ -2,7 +2,7 @@ class ApplicationController < Sinatra::Base
   set :session=>true
 
   use Rack::Session::Cookie,
-  expire_after:3600
+  expire_after:86400
 
 
   get '/' do

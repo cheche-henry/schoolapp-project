@@ -1,24 +1,14 @@
 import React, { useContext, useState, useEffect} from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+
 import Swal from 'sweetalert2';
 function Login() {
   const { login } = useContext(AuthContext);
   const { currentuser } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (currentuser) {
-      Swal.fire({
-        title: 'Already Logged In',
-        text: 'You are already logged in.',
-        icon: 'info',
-        confirmButtonText: 'OK'
-      });
-      navigate('/account/dashboard');
-    }
-  }, [currentuser, navigate]);
+ 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     login(email, password);

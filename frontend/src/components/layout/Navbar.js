@@ -62,7 +62,7 @@ function Navbar() {
                 </Link>
               </li>
               </>:<> <li className="nav-item">
-                <Link to="account" className="nav-link active">
+                <Link to="account/login" className="nav-link active">
                   🔒 Login
                 </Link>
               </li></>
