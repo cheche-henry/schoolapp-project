@@ -6,11 +6,14 @@ import About from './components/About';
 import Layout from "./components/layout/Layout";
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+import { AuthProvider } from './context/AuthContext';
+
 function App() {
 
 
   return (
     <BrowserRouter>
+    <AuthProvider>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -20,6 +23,7 @@ function App() {
           <Route path="contactus" element={<Dashboard/>} />
         </Route>
       </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
