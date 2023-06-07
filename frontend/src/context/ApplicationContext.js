@@ -7,7 +7,7 @@ export function ApplicationProvider({ children }) {
   const [applicationResponse, setApplicationResponse] = useState(null);
 
   const submitData = (formData) => {
-    fetch('http://127.0.0.1:9292/applications/addapplication', {
+    fetch('/applications/addapplication', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

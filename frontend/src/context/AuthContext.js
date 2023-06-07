@@ -1,11 +1,12 @@
-import React, { createContext } from 'react';
+import React, { createContext , useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
+  const [currentuser,set_currentUser] = useState()
   const login = (email, password) => {
-    fetch('http://127.0.0.1:9292/users/login', {
+    fetch('/users/login', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
@@ -34,9 +35,21 @@ export function AuthProvider({ children }) {
         }
       });
   };
+  
 
+  useEffect(() => {
+    fetch('/currentuser')
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        if(data.user){
+          set_currentUser(data.user)
+        }
+      })
+  }, []);
   const contextData = {
     login,
+    currentuser,
   };
 
   return (

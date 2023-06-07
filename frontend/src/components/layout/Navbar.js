@@ -2,8 +2,10 @@ import React, { useContext } from 'react';
 import './Navbar.css';
 import { Link } from 'react-router-dom'
 import { CourseContext } from '../../context/CourseContext';
+import { AuthContext } from '../../context/AuthContext';
 function Navbar() {
   const { courses } = useContext(CourseContext);
+  const { currentuser } = useContext(AuthContext);
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow mb-10 rounded" id="navigation">
@@ -52,11 +54,19 @@ function Navbar() {
                   ))}
               </ul>
               </li>
-              <li className="nav-item">
+              {currentuser && currentuser?
+              <>
+             <li className="nav-item">
+                <Link to="account/dashboard" className="nav-link active">
+                  Dashboard
+                </Link>
+              </li>
+              </>:<> <li className="nav-item">
                 <Link to="account" className="nav-link active">
                   🔒 Login
                 </Link>
-              </li>
+              </li></>
+          } 
             </ul>
           </div>
         </div>
