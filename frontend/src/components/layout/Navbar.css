@@ -13,6 +13,7 @@
 }
 #navlist li {
   margin-right: 30px;
+  cursor: pointer;
 }
 #navlist li a:hover {
   box-shadow: 0px 0px 5px blue;

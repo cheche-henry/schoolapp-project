@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './Navbar.css';
 import { Link } from 'react-router-dom'
-
+import { CourseContext } from '../../context/CourseContext';
 function Navbar() {
+  const { courses } = useContext(CourseContext);
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow mb-10 rounded" id="navigation">
@@ -43,32 +44,13 @@ function Navbar() {
                   Our courses
                 </a>
                 <ul className="dropdown-menu">
-                  <li>
-                    <a className="dropdown-item">
-                      UI/UX design
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item">
-                    Cybersecurity
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item">
-                      Software engineering
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item">
-                      Data science
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item">
-                      All courses
-                    </a>
-                  </li>
-                </ul>
+                {courses &&
+                  courses.map((course) => (
+                    <li key={course.id}>
+                      <a className="dropdown-item">{course.title}</a>
+                    </li>
+                  ))}
+              </ul>
               </li>
               <li className="nav-item">
                 <Link to="account" className="nav-link active">
