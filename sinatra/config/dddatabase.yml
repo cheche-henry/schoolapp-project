@@ -5,16 +5,16 @@ default: &default
   timeout: 5000
   host: localhost
   username: school
-  password: school
+  password: XyrQjqva9ZAueFh3nQWdMGZBmTieBJiv
 
 development:
   <<: *default
-  database: school
+  database: school_eaeh
 
 test:
   <<: *default
-  database: school
+  database: school_eaeh
 
 production:
   <<: *default
-  database: school
+  database: school_eaeh
