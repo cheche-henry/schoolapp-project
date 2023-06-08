@@ -5,16 +5,65 @@ export const ApplicationContext = createContext();
 
 export function ApplicationProvider({ children }) {
   const [applicationResponse, setApplicationResponse] = useState(null);
+  
+  const [students, setStudents] = useState([]);
 
   const submitData = (formData) => {
-    // ...existing code for submitting application data
+    fetch('/applications/addapplication', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setApplicationResponse(data);
+
+        if (data.success) {
+          Swal.fire('Success', data.success, 'success');
+        } else if (data.error) {
+          Swal.fire('Error', data.error, 'error');
+        } else {
+          Swal.fire('Error', 'Something went wrong', 'error');
+        }
+      })
+      .catch((error) => {
+        console.error('Error submitting form data:', error);
+        setApplicationResponse(null);
+        Swal.fire('Error', 'An error occurred while submitting form data', 'error');
+      });
+  };
+  
+  const addStudent = (studentData) => {
+    fetch('/students/addstudent', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(studentData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          // Update the list of students with the newly added student
+          setStudents((prevStudents) => [...prevStudents, data.student]);
+        } else if (data.error) {
+          console.error('Error:', data.error);
+        } else {
+          console.error('Something went wrong');
+        }
+      })
+      .catch((error) => {
+        console.error('Error posting student data:', error);
+      });
   };
 
   const getApplications = () => {
     fetch('/applications')
       .then((response) => response.json())
-      .then((application) => {
-        setApplicationResponse(application);
+      .then((applications) => {
+        setApplicationResponse(applications);
       })
       .catch((error) => {
         console.error('Error retrieving applications:', error);
@@ -51,9 +100,9 @@ export function ApplicationProvider({ children }) {
 
   const contextData = {
     applicationResponse,
-    submitData,
-    getApplications,
-    deleteApplication,
+        deleteApplication,
+        addStudent,
+        students,
   };
 
   return (

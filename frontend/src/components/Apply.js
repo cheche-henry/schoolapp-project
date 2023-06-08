@@ -58,7 +58,7 @@ function Apply() {
                 <div className="mb-4">
                   <label className="form-label">First Name</label>
                   <input
-                    type="text"
+                    type="text" pattern="[A-Za-z]+"
                     className="form-control"
                     placeholder="Enter first name"
                     value={firstname}
@@ -70,7 +70,7 @@ function Apply() {
                 <div className="mb-4">
                   <label className="form-label">Last Name</label>
                   <input
-                    type="text"
+                    type="text" pattern="[A-Za-z]+"
                     className="form-control"
                     placeholder="Enter last name"
                     value={lastname}
@@ -87,6 +87,7 @@ function Apply() {
                     value={date_of_birth}
                     onChange={(e) => setDateOfBirth(e.target.value)}
                     name="date_of_birth"
+                    max={new Date().toISOString().split('T')[0]}
                   />
                 </div>
 
@@ -113,7 +114,12 @@ function Apply() {
                     className="form-control"
                     placeholder="Enter phone number"
                     value={phone_number}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    onChange={(e) => {
+                      const input = e.target.value;
+                      if (input.length <= 10) {
+                        setPhoneNumber(input);
+                      }
+                    }}
                     name="phone_number"
                   />
                 </div>
@@ -121,7 +127,7 @@ function Apply() {
                 <div className="mb-4">
                   <label className="form-label">Email</label>
                   <input
-                    type="text"
+                    type="email"
                     className="form-control"
                     placeholder="Enter a valid email"
                     value={email}
