@@ -26,16 +26,18 @@ function Dashboard() {
     logout();
   };
   const getStudents = () => {
-    fetch('/students')
-      .then((response) => response.json())
-      .then((studentsData) => {
-        setStudents(studentsData); // Update the 'students' state with the fetched data
-      })
-      .catch((error) => {
-        console.error('Error retrieving students:', error);
-        setStudents([]); // Set 'students' state to an empty array in case of an error
-        Swal.fire('Error', 'An error occurred while retrieving students', 'error');
-      });
+    if (currentuser) {
+      fetch('https://schoolapp2.onrender.com/students')
+        .then((response) => response.json())
+        .then((studentsData) => {
+          setStudents(studentsData); // Update the 'students' state with the fetched data
+        })
+        .catch((error) => {
+          console.error('Error retrieving students:', error);
+          setStudents([]); // Set 'students' state to an empty array in case of an error
+          Swal.fire('Error', 'An error occurred while retrieving students', 'error');
+        });
+    }
   };
   const handleChangePassword = (e) => {
     e.preventDefault();
@@ -45,7 +47,7 @@ function Dashboard() {
       return;
     }
 
-    fetch(`/users/changepassword/${currentuser.id}`, {
+    fetch(`https://schoolapp2.onrender.com/users/changepassword/${currentuser.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -112,7 +114,7 @@ function Dashboard() {
       password,
     };
   
-    fetch('/users/adduser', {
+    fetch('https://schoolapp2.onrender.com/users/adduser', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(userData),
@@ -147,7 +149,7 @@ function Dashboard() {
     }).then((result) => {
       if (result.isConfirmed) {
         // Perform the POST request to add the application details to students
-        fetch('/students/addstudent', {
+        fetch('https://schoolapp2.onrender.com/students/addstudent', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(applicationResponse.find(app => app.id === applicationId))

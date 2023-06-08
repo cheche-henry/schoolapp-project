@@ -9,7 +9,7 @@ export function AuthProvider({ children }) {
   const [currentuser, set_currentUser] = useState();
 
   const login = (email, password) => {
-    fetch('/users/login', {
+    fetch('https://schoolapp2.onrender.com/users/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
@@ -42,7 +42,7 @@ export function AuthProvider({ children }) {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch('/users/logout', {
+        fetch('https://schoolapp2.onrender.com/users/logout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }
         })
@@ -65,7 +65,7 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    fetch('/currentuser')
+    fetch('https://schoolapp2.onrender.com/currentuser')
       .then((res) => res.json())
       .then((data) => {
         if (data.user) {

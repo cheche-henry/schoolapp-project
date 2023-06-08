@@ -6,7 +6,7 @@ export function CourseProvider({ children }) {
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
-    fetch('/courses')
+    fetch('https://schoolapp2.onrender.com/courses')
       .then((res) => res.json())
       .then((data) => {
         setCourses(data);

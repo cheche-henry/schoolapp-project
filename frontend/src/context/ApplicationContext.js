@@ -9,7 +9,7 @@ export function ApplicationProvider({ children }) {
   const [students, setStudents] = useState([]);
 
   const submitData = (formData) => {
-    fetch('/applications/addapplication', {
+    fetch('https://schoolapp2.onrender.com/applications/addapplication', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export function ApplicationProvider({ children }) {
   };
   
   const addStudent = (studentData) => {
-    fetch('/students/addstudent', {
+    fetch('https://schoolapp2.onrender.com/students/addstudent', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -60,7 +60,8 @@ export function ApplicationProvider({ children }) {
   };
 
   const getApplications = () => {
-    fetch('/applications')
+    
+    fetch('https://schoolapp2.onrender.com/applications')
       .then((response) => response.json())
       .then((applications) => {
         setApplicationResponse(applications);
@@ -72,7 +73,7 @@ export function ApplicationProvider({ children }) {
       });
   };
   const getStudents = () => {
-    fetch('/students')
+    fetch('https://schoolapp2.onrender.com/students')
       .then((response) => response.json())
       .then((students) => {
         setApplicationResponse(students);
@@ -84,7 +85,7 @@ export function ApplicationProvider({ children }) {
       });
   };
   const deleteApplication = (applicationId) => {
-    fetch(`/applications/delete/${applicationId}`, {
+    fetch(`https://schoolapp2.onrender.com/applications/delete/${applicationId}`, {
       method: 'DELETE',
     })
       .then((response) => response.json())
