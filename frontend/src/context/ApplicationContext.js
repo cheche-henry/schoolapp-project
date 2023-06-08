@@ -71,7 +71,18 @@ export function ApplicationProvider({ children }) {
         Swal.fire('Error', 'An error occurred while retrieving applications', 'error');
       });
   };
-
+  const getStudents = () => {
+    fetch('/students')
+      .then((response) => response.json())
+      .then((students) => {
+        setApplicationResponse(students);
+      })
+      .catch((error) => {
+        console.error('Error retrieving applications:', error);
+        setApplicationResponse(null);
+        Swal.fire('Error', 'An error occurred while retrieving applications', 'error');
+      });
+  };
   const deleteApplication = (applicationId) => {
     fetch(`/applications/delete/${applicationId}`, {
       method: 'DELETE',
@@ -100,9 +111,10 @@ export function ApplicationProvider({ children }) {
 
   const contextData = {
     applicationResponse,
+    submitData,
         deleteApplication,
         addStudent,
-        students,
+        getStudents,
   };
 
   return (

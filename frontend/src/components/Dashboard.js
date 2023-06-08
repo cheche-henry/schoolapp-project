@@ -7,9 +7,10 @@ import Swal from 'sweetalert2';
 
 function Dashboard() {
   const navigate = useNavigate();
+  const [students, setStudents] = useState([]);
   const { currentuser, logout } = useContext(AuthContext);
-  const { applicationResponse, deleteApplication, addStudent, getApplications, getStudents } = useContext(ApplicationContext);
-  const [activeSubpage, setActiveSubpage] = useState('');
+  const { applicationResponse, deleteApplication, addStudent, getApplication  } = useContext(ApplicationContext);
+  const [activeSubpage, setActiveSubpage] = useState('')
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
@@ -24,7 +25,18 @@ function Dashboard() {
   const handleLogout = () => {
     logout();
   };
-
+  const getStudents = () => {
+    fetch('/students')
+      .then((response) => response.json())
+      .then((studentsData) => {
+        setStudents(studentsData); // Update the 'students' state with the fetched data
+      })
+      .catch((error) => {
+        console.error('Error retrieving students:', error);
+        setStudents([]); // Set 'students' state to an empty array in case of an error
+        Swal.fire('Error', 'An error occurred while retrieving students', 'error');
+      });
+  };
   const handleChangePassword = (e) => {
     e.preventDefault();
 
@@ -60,13 +72,16 @@ function Dashboard() {
         setPasswordError('Something went wrong');
       });
   };
-
+  useEffect(() => {
+   
+    getStudents(); // Fetch students when the component mounts
+  }, []);
   useEffect(() => {
     if (!currentuser) {
       navigate('/account/login');
     }
-  }, [currentuser, navigate]);
 
+  }, [currentuser, navigate, getStudents]);
   const handleReject = (applicationId) => {
     Swal.fire({
       title: 'Are you sure?',
@@ -112,7 +127,7 @@ function Dashboard() {
           setRank('');
           setPassword('');
         } else {
-          Swal.fire('Error', 'Failed to add user', 'error');
+          Swal.fire('Error', data.error, 'error');
         }
       })
       .catch((error) => {
@@ -120,6 +135,41 @@ function Dashboard() {
         console.error(error);
       });
   };
+  const handleApprove = (applicationId) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, approve it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Perform the POST request to add the application details to students
+        fetch('/students/addstudent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(applicationResponse.find(app => app.id === applicationId))
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success) {
+              Swal.fire('Success', 'Application approved and student added!', 'success');
+              // Optionally, you can also delete the application from the pending applications list
+              deleteApplication(applicationId);
+            } else {
+              Swal.fire('Error', data.error, 'error');
+            }
+          })
+          .catch((error) => {
+            Swal.fire('Error', 'Something went wrong', 'error');
+            console.error(error);
+          });
+      }
+    });
+  };
+  
   return (
     <>
       <div className="d-flex justify-content-center" style={{ marginTop: '40px' }} id="btn">
@@ -127,12 +177,19 @@ function Dashboard() {
           <button className="btn mb-2 mb-md-0 me-md-3" onClick={() => showSubpage('subpage1')}>
             Pending applications
           </button>
-          <button className="btn mb-2 mb-md-0 me-md-3" onClick={() => showSubpage('subpage2')}>
-            Change password
+          <button className="btn mb-2 mb-md-0 me-md-3" onClick={() => showSubpage('subpage5')}>
+            Students
           </button>
           <button className="btn mb-2 mb-md-0 me-md-3" onClick={() => showSubpage('subpage3')}>
             My account
           </button>
+          <button className="btn mb-2 mb-md-0 me-md-3" onClick={() => showSubpage('subpage2')}>
+            Account settings
+          </button>
+          {currentuser && currentuser.rank !== 'admin' ? null : (
+          <button className="btn mb-2 mb-md-0 me-md-3" onClick={() => showSubpage('subpage4')}>
+            Add user
+          </button>)}
         </div>
       </div>
 
@@ -158,19 +215,23 @@ function Dashboard() {
               <p>Email: {application.email}</p>
               <p>Course Title: {application.course_title}</p>
               <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button
-                  className="btn btn-danger me-md-2"
-                  onClick={() => handleReject(application.id)}
-                >
-                  Reject
-                </button>
-                <button
-                  className="btn btn-primary"
-                  onClick={() => handleReject(application.id)}
-                >
-                  Approve
-                </button>
-              </div>
+  {currentuser && currentuser.rank === 'admin' && (
+    <>
+      <button
+        className="btn btn-danger me-md-2"
+        onClick={() => handleReject(application.id)}
+      >
+        Reject
+      </button>
+      <button
+  className="btn btn-primary"
+  onClick={() => handleApprove(application.id)}
+>
+  Approve
+</button>
+    </>
+  )}
+</div>
             </div>
           </div>
         </div>
@@ -180,40 +241,91 @@ function Dashboard() {
     )}
   </div>
 )}
-
+ 
+ {activeSubpage === 'subpage5' && (
+  <div id="subpage5" className="subpage" style={{ marginTop: '20px' }}>
+    <h3 className="text-center text-primary">Pending applications</h3>
+    {students.length === 0 ? (
+      <p className="text-center">No pending applications.</p>
+    ) : (
+      students.map((student) => (
+        <div key={student.id} className="container" style={{ marginBottom: '30px' }}>
+          <div className="row shadow" style={{ padding: '30px' }}>
+            <div className="col-md-6">
+              <img
+                className="bookimage img-fluid"
+                src="https://www.transparentpng.com/thumb/success/png-best-success-9.png"
+                alt="Application"
+              />
+            </div>
+            <div className="col-md-6">
+              <h4>Name: {student.firstname} {student.lastname}</h4>
+              <p>Date of Birth: {student.date_of_birth}</p>
+              <p>Gender: {student.gender}</p>
+              <p>Phone Number: {student.phone_number}</p>
+              <p>Email: {student.email}</p>
+              <p>Course Title: {student.course_title}</p>
+            </div>
+          </div>
+        </div>
+      ))
+    )}
+  </div>
+)}
 
 {activeSubpage === 'subpage2' && (
         <div id="subpage2" className="subpage" style={{ marginTop: '20px' }}>
-          <h3 className="text-center text-primary">Change password</h3>
-          {/* {studentDetails ? (
-            <div className="container" style={{ marginBottom: '30px' }}>
-              <div className="row shadow" style={{ padding: '30px' }}>
-                <div className="col-md-6">
-                  <img
-                    className="bookimage img-fluid"
-                    src="https://png.pngtree.com/png-vector/20220707/ourmid/pngtree-close-html-bracket-embed-code-png"
-                    alt="Student"
-                  />
-                </div>
-                <div className="col-md-6">
-                  <h4></h4>
-                  <p></p>
-                  <p></p>
-                  <p></p>
-                  <p></p>
-                  <p></p>
-                  <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <button className="btn btn-danger me-md-2">
-                      Reject
-                    </button>
-                  </div>
-                </div>
-              </div>
+        <h3 className="text-center text-primary">Account settings</h3>
+        <div className="d-flex justify-content-center mt-4">
+          <form onSubmit={handleChangePassword} className="form-container">
+            <h3 className="text-center">Change Password</h3>
+            <div className="form-group">
+              <label htmlFor="currentPassword">Current Password</label>
+              <input
+                type="password"
+                id="currentPassword"
+                className="form-control"
+                placeholder="Enter current password"
+                value={passwordData.currentPassword}
+                onChange={(e) =>
+                  setPasswordData({ ...passwordData, currentPassword: e.target.value })
+                }
+              />
             </div>
-          ) : (
-            <p className="text-center">No student details available.</p>
-          )} */}
+            <div className="form-group">
+              <label htmlFor="newPassword">New Password</label>
+              <input
+                type="password"
+                id="newPassword"
+                className="form-control"
+                placeholder="Enter new password"
+                value={passwordData.newPassword}
+                onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="confirmPassword">Confirm Password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                className="form-control"
+                placeholder="Confirm new password"
+                value={passwordData.confirmPassword}
+                onChange={(e) =>
+                  setPasswordData({ ...passwordData, confirmPassword: e.target.value })
+                }
+              />
+            </div>
+            {passwordError && <p className="text-danger">{passwordError}</p>}
+            <div className="d-flex justify-content-center">
+              <button type="submit" className="btn btn-primary">
+                Change Password
+              </button>
+            </div>
+          </form>
         </div>
+      </div>
+      
 )}
 
       {activeSubpage === 'subpage3' && (
@@ -251,58 +363,11 @@ function Dashboard() {
         </div>
         
       )}
-      <div className="d-flex justify-content-center mt-4">
-        <form onSubmit={handleChangePassword} className="form-container">
-          <h3 className="text-center">Change Password</h3>
-          <div className="form-group">
-            <label htmlFor="currentPassword">Current Password</label>
-            <input
-              type="password"
-              id="currentPassword"
-              className="form-control"
-              placeholder="Enter current password"
-              value={passwordData.currentPassword}
-              onChange={(e) =>
-                setPasswordData({ ...passwordData, currentPassword: e.target.value })
-              }
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="newPassword">New Password</label>
-            <input
-              type="password"
-              id="newPassword"
-              className="form-control"
-              placeholder="Enter new password"
-              value={passwordData.newPassword}
-              onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              className="form-control"
-              placeholder="Confirm new password"
-              value={passwordData.confirmPassword}
-              onChange={(e) =>
-                setPasswordData({ ...passwordData, confirmPassword: e.target.value })
-              }
-            />
-          </div>
-          {passwordError && <p className="text-danger">{passwordError}</p>}
-          <div className="d-flex justify-content-center">
-            <button type="submit" className="btn btn-primary">
-              Change Password
-            </button>
-          </div>
-        </form>
-      </div>
+      {activeSubpage === 'subpage4' && (
       <div id="subpage4" className="subpage" style={{ marginTop: '20px' }}>
       {currentuser && currentuser.rank !== 'admin' ? null : (
         <div className="form-control">
-          <h2>Add User</h2>
+          <h2 className='text-center text-primary'>Add User</h2>
           <form onSubmit={handleSubmit}>
             <div>
               <label>Name:</label>
@@ -311,7 +376,7 @@ function Dashboard() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                style={{ width: '100%' }}
+                style={{ width: '100%', border:"solid 1px" }}
               />
             </div>
             <div>
@@ -321,7 +386,7 @@ function Dashboard() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                style={{ width: '100%' }}
+                style={{ width: '100%' , border:"solid 1px"}}
               />
             </div>
             <div>
@@ -331,7 +396,7 @@ function Dashboard() {
                 value={rank}
                 onChange={(e) => setRank(e.target.value)}
                 required
-                style={{ width: '100%' }}
+                style={{ width: '100%', border:"solid 1px" }}
               />
             </div>
             <div>
@@ -341,16 +406,18 @@ function Dashboard() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                style={{ width: '100%' }}
+                style={{ width: '100%' , border:"solid 1px"}}
               />
             </div>
-            <button className='btn btn-primary' type="submit">Add User</button>
+            <button style={{ marginTop: '20px' }} className='btn btn-primary' type="submit">Add User</button>
           </form>
         </div>
       )}
     </div>
+      )}
     </>
   );
 }
 
 export default Dashboard;
+
