@@ -6,8 +6,7 @@ export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const navigate = useNavigate();
-  const [onChange, setOnChange] = useState(false);
-  const [current_user, setCurrentUser] = useState(null); // Initialize current_user as null
+  const [currentuser, set_currentUser] = useState();
 
   const login = (email, password) => {
     fetch('https://schoolapp-utoj.onrender.com/users/login', {
@@ -17,13 +16,26 @@ export function AuthProvider({ children }) {
     })
       .then((res) => res.json())
       .then((response) => {
-        console.log(response); // Log the response for debugging
         if (response.error) {
           Swal.fire('Error', response.error, 'error');
         } else if (response.success) {
-         console.log(response)
-          // Create a user object with the logged-in email (or other relevant user information)
-          setCurrentUser(email); // Set the current user state
+          const user = { email }; // Create a user object with the logged-in email (or other relevant user information)
+          set_currentUser(user); // Set the current user state
+  
+          // Post the user details to the server
+          fetch('https://schoolapp-utoj.onrender.com/currentuser', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user })
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              // Handle the response if needed
+            })
+            .catch((error) => {
+              // Handle the error if needed
+            });
+  
           navigate('/account/dashboard');
           Swal.fire('Success', response.success, 'success');
         } else {
@@ -43,17 +55,17 @@ export function AuthProvider({ children }) {
       showCancelButton: true,
       confirmButtonText: 'Logout',
       cancelButtonText: 'Cancel',
-      reverseButtons: true,
+      reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
         fetch('https://schoolapp-utoj.onrender.com/users/logout', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json' }
         })
           .then((res) => res.json())
           .then((response) => {
             if (response.success) {
-              setCurrentUser(null); // Clear the current user state
+              set_currentUser(null); // Clear the current user state
               Swal.fire('Success', 'Logout success', 'success').then(() => {
                 navigate('/account/login'); // Redirect to the home page after successful logout
               });
@@ -69,23 +81,20 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    fetch('https://schoolapp-utoj.onrender.com/currentuser', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
+    fetch('https://schoolapp-utoj.onrender.com/currentuser')
       .then((res) => res.json())
-      .then((response) => {
-        console.log(response); // Log the response for debugging
-        if (response.currentUser) {
-          setCurrentUser(response.currentUser);
+      .then((data) => {
+        if (data.user) {
+          set_currentUser(data.user);
+          navigate('/account/dashboard');
         }
       });
-  }, [onChange]);
+  }, [navigate]);
 
   const contextData = {
     login,
     logout,
-    current_user,
+    currentuser
   };
 
   return (

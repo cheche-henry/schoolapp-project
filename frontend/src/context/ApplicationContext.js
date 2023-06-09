@@ -1,11 +1,12 @@
 import React, { createContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 export const ApplicationContext = createContext();
 
 export function ApplicationProvider({ children }) {
   const [applicationResponse, setApplicationResponse] = useState(null);
-  
+  const navigate = useNavigate();
   const [students, setStudents] = useState([]);
 
   const submitData = (formData) => {
@@ -22,6 +23,7 @@ export function ApplicationProvider({ children }) {
 
         if (data.success) {
           Swal.fire('Success', data.success, 'success');
+          navigate('/'); // Navigate to the home page
         } else if (data.error) {
           Swal.fire('Error', data.error, 'error');
         } else {
@@ -53,6 +55,7 @@ export function ApplicationProvider({ children }) {
         } else {
           console.error('Something went wrong');
         }
+        navigate('/')
       })
       .catch((error) => {
         console.error('Error posting student data:', error);
@@ -91,7 +94,7 @@ export function ApplicationProvider({ children }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          Swal.fire('Success', data.success, 'success');
+          Swal.fire('Success', 'Action has been taken on apllication', 'success');
           // Refresh the application list after successful deletion
           getApplications();
         } else if (data.error) {

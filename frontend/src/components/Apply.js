@@ -1,10 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { ApplicationContext } from '../context/ApplicationContext';
 import { CourseContext } from '../context/CourseContext';
 
 function Apply() {
+  
   const { courses } = useContext(CourseContext);
   const { id } = useParams();
   const [course, setCourse] = useState(null);
@@ -34,7 +35,8 @@ function Apply() {
       course_title: course.title,
     };
 
-    submitData(formData);
+    submitData(formData)
+    
   };
 
   if (!course) {
@@ -116,7 +118,7 @@ function Apply() {
                     value={phone_number}
                     onChange={(e) => {
                       const input = e.target.value;
-                      if (input.length <= 13 && input.length >= 10) {
+                      if (input.length <= 13 ) {
                         setPhoneNumber(input);
                       }
                     }}

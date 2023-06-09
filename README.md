@@ -39,11 +39,13 @@ The Bootcamp Website is built using the following technologies:
   - Click on a course to see more details.
   - Fill out the application form to apply for a course.
 - As an administrator:
+  - Refresh page to fetch new applications
   - Log in using your administrator credentials.
+       email: kelvin@gmail.com
+       password: 1234
   - Access the admin dashboard to review course applications.
   - Approve or reject applications based on the provided information.
   - Add new users to the system.
-  - Change account passwords for users.
 
 ## Contributing
 

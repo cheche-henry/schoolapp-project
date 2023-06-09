@@ -1,6 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import Faq from './Faq';
 function Home() {
+  const [reloadCount, setReloadCount] = useState(0);
+
+  useEffect(() => {
+    if (reloadCount < 0) {
+      setReloadCount(reloadCount + 1);
+      window.location.reload();
+    }
+  }, [reloadCount]);
+
   return (
     <div> <div className="container" style={{ marginTop: '100px', marginBottom: '75px' }}>
       <div className="landing row">
