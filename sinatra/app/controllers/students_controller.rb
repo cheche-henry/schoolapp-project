@@ -5,7 +5,7 @@ class StudentsController < ApplicationController
   end
 
   post '/students/addstudent' do
-    if session[:user_id]
+   
       _firstname = params[:firstname]
       _secondname = params[:secondname]
       _date_of_birth = params[:date_of_birth]
@@ -49,10 +49,7 @@ class StudentsController < ApplicationController
         status 404
         message = { error: "Student not found" }
       end
-    else
-      status 401
-      message = { error: "Not logged in" }
-    end
+   
 
     message.to_json()
   end

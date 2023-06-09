@@ -116,7 +116,7 @@ function Apply() {
                     value={phone_number}
                     onChange={(e) => {
                       const input = e.target.value;
-                      if (input.length <= 10) {
+                      if (input.length <= 13 && input.length >= 10) {
                         setPhoneNumber(input);
                       }
                     }}

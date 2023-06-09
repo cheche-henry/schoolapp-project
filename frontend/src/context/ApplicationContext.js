@@ -59,8 +59,8 @@ export function ApplicationProvider({ children }) {
       });
   };
 
+
   const getApplications = () => {
-    
     fetch('https://schoolapp-utoj.onrender.com/applications')
       .then((response) => response.json())
       .then((applications) => {
@@ -108,6 +108,7 @@ export function ApplicationProvider({ children }) {
 
   useEffect(() => {
     getApplications();
+    getStudents();
   }, []);
 
   const contextData = {

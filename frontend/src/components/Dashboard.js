@@ -47,7 +47,7 @@ function Dashboard() {
       return;
     }
 
-    fetch(`https://schoolapp-utoj.onrender.com/users/changepassword/${currentuser.id}`, {
+    fetch(`https://schoolapp-utoj.onrender.com/users/changepassword/1`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -176,19 +176,17 @@ function Dashboard() {
           <button className="btn mb-2 mb-md-0 me-md-3" onClick={() => showSubpage('subpage1')}>
             Pending applications
           </button>
-          <button className="btn mb-2 mb-md-0 me-md-3" onClick={() => showSubpage('subpage5')}>
-            Students
-          </button>
+  
           <button className="btn mb-2 mb-md-0 me-md-3" onClick={() => showSubpage('subpage3')}>
             My account
           </button>
           <button className="btn mb-2 mb-md-0 me-md-3" onClick={() => showSubpage('subpage2')}>
             Account settings
           </button>
-          {currentuser && currentuser.rank !== 'admin' ? null : (
+          
           <button className="btn mb-2 mb-md-0 me-md-3" onClick={() => showSubpage('subpage4')}>
             Add user
-          </button>)}
+          </button>
         </div>
       </div>
 
@@ -204,6 +202,7 @@ function Dashboard() {
                 className="bookimage img-fluid"
                 src="https://icons-for-free.com/iconfiles/png/512/coding+dev+development+programming+tag+icon-1320165734987953368.png"
                 alt="Application"
+                style={{ height: '300px' }}
               />
             </div>
             <div className="col-md-6">
@@ -240,37 +239,7 @@ function Dashboard() {
     )}
   </div>
 )}
- 
- {activeSubpage === 'subpage5' && (
-  <div id="subpage5" className="subpage" style={{ marginTop: '20px' }}>
-    <h3 className="text-center text-primary">Pending applications</h3>
-    {students.length === 0 ? (
-      <p className="text-center">No pending applications.</p>
-    ) : (
-      students.map((student) => (
-        <div key={student.id} className="container" style={{ marginBottom: '30px' }}>
-          <div className="row shadow" style={{ padding: '30px' }}>
-            <div className="col-md-6">
-              <img
-                className="bookimage img-fluid"
-                src="https://www.transparentpng.com/thumb/success/png-best-success-9.png"
-                alt="Application"
-              />
-            </div>
-            <div className="col-md-6">
-              <h4>Name: {student.firstname} {student.lastname}</h4>
-              <p>Date of Birth: {student.date_of_birth}</p>
-              <p>Gender: {student.gender}</p>
-              <p>Phone Number: {student.phone_number}</p>
-              <p>Email: {student.email}</p>
-              <p>Course Title: {student.course_title}</p>
-            </div>
-          </div>
-        </div>
-      ))
-    )}
-  </div>
-)}
+
 
 {activeSubpage === 'subpage2' && (
         <div id="subpage2" className="subpage" style={{ marginTop: '20px' }}>
@@ -345,7 +314,7 @@ function Dashboard() {
                   <div className="user">
                     <h3>Account Details</h3>
                     
-                    <p>Email: {currentuser.email}</p>
+                    <p>Current user: {currentuser.email}</p>
                     <button className="btn btn-primary mb-2" onClick={handleLogout}>
                       Logout
                     </button>
@@ -361,7 +330,7 @@ function Dashboard() {
       )}
       {activeSubpage === 'subpage4' && (
       <div id="subpage4" className="subpage" style={{ marginTop: '20px' }}>
-      {currentuser && currentuser.rank !== 'admin' ? null : (
+      
         <div className="form-control">
           <h2 className='text-center text-primary'>Add User</h2>
           <form onSubmit={handleSubmit}>
@@ -372,7 +341,7 @@ function Dashboard() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                style={{ width: '100%', border:"solid 1px" }}
+                style={{ width: '100%', border:"solid 1px" , margin:"15px"}}
               />
             </div>
             <div>
@@ -382,7 +351,7 @@ function Dashboard() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                style={{ width: '100%' , border:"solid 1px"}}
+                style={{ width: '100%' , border:"solid 1px", margin:"15px"}}
               />
             </div>
             <div>
@@ -392,7 +361,7 @@ function Dashboard() {
                 value={rank}
                 onChange={(e) => setRank(e.target.value)}
                 required
-                style={{ width: '100%', border:"solid 1px" }}
+                style={{ width: '100%', border:"solid 1px", margin:"15px" }}
               />
             </div>
             <div>
@@ -402,13 +371,13 @@ function Dashboard() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                style={{ width: '100%' , border:"solid 1px"}}
+                style={{ width: '100%' , border:"solid 1px" , margin:"15px"}}
               />
             </div>
             <button style={{ marginTop: '20px' }} className='btn btn-primary' type="submit">Add User</button>
           </form>
         </div>
-      )}
+      
     </div>
       )}
     </>
