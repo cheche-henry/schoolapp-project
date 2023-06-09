@@ -4,32 +4,31 @@ class UsersController < ApplicationController
     users.to_json()
   end
 
-  post '/users/adduser' do
-    _name = params[:name]
+  post '/users/login' do
     _email = params[:email]
-    _rank = params[:rank]
     _password = params[:password]
-
-    if _name.present? && _email.present? && _rank.present? && _password.present?
-      if User.exists?(email: _email)
-        status 406
-        message = { error: "Email currently in use" }
+  
+    if _email.present? && _password.present?
+      user = User.find_by(email: _email)
+      if user && user.authenticate(_password)
+        session[:user_id] = user.id  # Set the session value here
+        status 200
+        message = { 
+          success: "Successfully logged in",
+          user: user.as_json(only: [:id, :name, :email, :rank]) # Include all user details in the response
+        }
       else
-        user = User.create(name: _name, email: _email, rank: _rank, password: _password)
-        if user
-          message = { success: "User has been created successfully" }
-        else
-          status 406
-          message = { error: "Error creating the user" }
-        end
+        status 401
+        message = { error: "Incorrect login credentials" }
       end
     else
       status 406
       message = { error: "All values are required" }
     end
-
+  
     message.to_json()
   end
+  
 
   delete '/users/delete/:id' do
     user = User.find_by(id: params[:id])

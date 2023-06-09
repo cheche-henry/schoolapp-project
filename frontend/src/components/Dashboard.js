@@ -8,9 +8,11 @@ import Swal from 'sweetalert2';
 function Dashboard() {
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
-  const { currentuser, logout } = useContext(AuthContext);
-  const { applicationResponse, deleteApplication, addStudent, getApplication  } = useContext(ApplicationContext);
-  const [activeSubpage, setActiveSubpage] = useState('')
+  const { current_user, logout } = useContext(AuthContext);
+  const { applicationResponse, deleteApplication, addStudent, getApplication } = useContext(
+    ApplicationContext
+  );
+  const [activeSubpage, setActiveSubpage] = useState('');
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
@@ -22,23 +24,11 @@ function Dashboard() {
     setActiveSubpage(subpageId);
   };
 
+
   const handleLogout = () => {
     logout();
   };
-  const getStudents = () => {
-    if (currentuser) {
-      fetch('https://schoolapp-utoj.onrender.com/students')
-        .then((response) => response.json())
-        .then((studentsData) => {
-          setStudents(studentsData); // Update the 'students' state with the fetched data
-        })
-        .catch((error) => {
-          console.error('Error retrieving students:', error);
-          setStudents([]); // Set 'students' state to an empty array in case of an error
-          Swal.fire('Error', 'An error occurred while retrieving students', 'error');
-        });
-    }
-  };
+
   const handleChangePassword = (e) => {
     e.preventDefault();
 
@@ -75,12 +65,12 @@ function Dashboard() {
       });
   };
   useEffect(() => {
-    if (!currentuser) {
+    if (!current_user) {
       navigate('/account/login');
     } else {
-      getStudents(); // Fetch students when the component mounts
+     // Fetch students when the component mounts
     }
-  }, [currentuser, navigate, getStudents]);
+  }, [current_user, navigate]);
   const handleReject = (applicationId) => {
     Swal.fire({
       title: 'Are you sure?',
@@ -299,7 +289,7 @@ function Dashboard() {
       {activeSubpage === 'subpage3' && (
         <div id="subpage3" className="subpage" style={{ marginTop: '20px' }}>
           <h3 className="text-center text-primary">My account</h3>
-          {currentuser && (
+          {current_user && (
             <div className="container" style={{ padding: '30px', marginBottom: '30px' }}>
               <div className="row shadow" style={{ padding: '75px' }}>
                 <div className="col-md-6">
@@ -314,7 +304,7 @@ function Dashboard() {
                   <div className="user">
                     <h3>Account Details</h3>
                     
-                    <p>Current user: {currentuser.email}</p>
+                    <p>Current user: {current_user.email}</p>
                     <button className="btn btn-primary mb-2" onClick={handleLogout}>
                       Logout
                     </button>
