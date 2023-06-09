@@ -54,4 +54,4 @@ Contributions to the Bootcamp Website are welcome! If you find any issues or hav
 
 ## License
 
-The Bootcamp Website is open-source software licensed under the [MIT License](LICENSE).
+The Bootcamp Website is open-source software licensed under the [MIT License](https://github.com/cheche-henry/schoolapp-project/blob/main/LICENSE).
