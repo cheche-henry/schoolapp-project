@@ -9,7 +9,7 @@ export function ApplicationProvider({ children }) {
   const [students, setStudents] = useState([]);
 
   const submitData = (formData) => {
-    fetch('https://schoolapp2.onrender.com/applications/addapplication', {
+    fetch('https://schoolapp-utoj.onrender.com//applications/addapplication', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -34,9 +34,9 @@ export function ApplicationProvider({ children }) {
         Swal.fire('Error', 'An error occurred while submitting form data', 'error');
       });
   };
-  
+
   const addStudent = (studentData) => {
-    fetch('https://schoolapp2.onrender.com/students/addstudent', {
+    fetch('https://schoolapp-utoj.onrender.com/students/addstudent', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ export function ApplicationProvider({ children }) {
 
   const getApplications = () => {
     
-    fetch('https://schoolapp2.onrender.com/applications')
+    fetch('https://schoolapp-utoj.onrender.com/applications')
       .then((response) => response.json())
       .then((applications) => {
         setApplicationResponse(applications);
@@ -73,7 +73,7 @@ export function ApplicationProvider({ children }) {
       });
   };
   const getStudents = () => {
-    fetch('https://schoolapp2.onrender.com/students')
+    fetch('https://schoolapp-utoj.onrender.com/students')
       .then((response) => response.json())
       .then((students) => {
         setApplicationResponse(students);
@@ -85,7 +85,7 @@ export function ApplicationProvider({ children }) {
       });
   };
   const deleteApplication = (applicationId) => {
-    fetch(`https://schoolapp2.onrender.com/applications/delete/${applicationId}`, {
+    fetch(`https://schoolapp-utoj.onrender.com/applications/delete/${applicationId}`, {
       method: 'DELETE',
     })
       .then((response) => response.json())

@@ -9,7 +9,7 @@ export function AuthProvider({ children }) {
   const [currentuser, set_currentUser] = useState();
 
   const login = (email, password) => {
-    fetch('https://schoolapp2.onrender.com/users/login', {
+    fetch('https://schoolapp-utoj.onrender.com/users/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
@@ -19,7 +19,23 @@ export function AuthProvider({ children }) {
         if (response.error) {
           Swal.fire('Error', response.error, 'error');
         } else if (response.success) {
-          set_currentUser(response.user);
+          const user = { email }; // Create a user object with the logged-in email (or other relevant user information)
+          set_currentUser(user); // Set the current user state
+  
+          // Post the user details to the server
+          fetch('https://schoolapp-utoj.onrender.com/currentuser', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user })
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              // Handle the response if needed
+            })
+            .catch((error) => {
+              // Handle the error if needed
+            });
+  
           navigate('/account/dashboard');
           Swal.fire('Success', response.success, 'success');
         } else {
@@ -42,7 +58,7 @@ export function AuthProvider({ children }) {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch('https://schoolapp2.onrender.com/users/logout', {
+        fetch('https://schoolapp-utoj.onrender.com/users/logout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }
         })
@@ -65,7 +81,7 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    fetch('https://schoolapp2.onrender.com/currentuser')
+    fetch('https://schoolapp-utoj.onrender.com/currentuser')
       .then((res) => res.json())
       .then((data) => {
         if (data.user) {

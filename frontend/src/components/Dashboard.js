@@ -27,7 +27,7 @@ function Dashboard() {
   };
   const getStudents = () => {
     if (currentuser) {
-      fetch('https://schoolapp2.onrender.com/students')
+      fetch('https://schoolapp-utoj.onrender.com/students')
         .then((response) => response.json())
         .then((studentsData) => {
           setStudents(studentsData); // Update the 'students' state with the fetched data
@@ -47,7 +47,7 @@ function Dashboard() {
       return;
     }
 
-    fetch(`https://schoolapp2.onrender.com/users/changepassword/${currentuser.id}`, {
+    fetch(`https://schoolapp-utoj.onrender.com/users/changepassword/${currentuser.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -75,14 +75,11 @@ function Dashboard() {
       });
   };
   useEffect(() => {
-   
-    getStudents(); // Fetch students when the component mounts
-  }, []);
-  useEffect(() => {
     if (!currentuser) {
       navigate('/account/login');
+    } else {
+      getStudents(); // Fetch students when the component mounts
     }
-
   }, [currentuser, navigate, getStudents]);
   const handleReject = (applicationId) => {
     Swal.fire({
@@ -114,7 +111,7 @@ function Dashboard() {
       password,
     };
   
-    fetch('https://schoolapp2.onrender.com/users/adduser', {
+    fetch('https://schoolapp-utoj.onrender.com/users/adduser', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(userData),
@@ -205,7 +202,7 @@ function Dashboard() {
             <div className="col-md-6">
               <img
                 className="bookimage img-fluid"
-                src="https://png.pngtree.com/png-vector/20220707/ourmid/pngtree-close-html-bracket-embed-code-png"
+                src="https://icons-for-free.com/iconfiles/png/512/coding+dev+development+programming+tag+icon-1320165734987953368.png"
                 alt="Application"
               />
             </div>
@@ -217,7 +214,7 @@ function Dashboard() {
               <p>Email: {application.email}</p>
               <p>Course Title: {application.course_title}</p>
               <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-  {currentuser && currentuser.rank === 'admin' && (
+ 
     <>
       <button
         className="btn btn-danger me-md-2"
@@ -232,7 +229,7 @@ function Dashboard() {
   Approve
 </button>
     </>
-  )}
+ 
 </div>
             </div>
           </div>
@@ -347,11 +344,8 @@ function Dashboard() {
                 <div className="col-md-6">
                   <div className="user">
                     <h3>Account Details</h3>
-                    <p>Name: {currentuser.name}</p>
+                    
                     <p>Email: {currentuser.email}</p>
-                    <p>Rank: {currentuser.rank}</p>
-                    <p>Check-in date: {currentuser.created_at}</p>
-                    <p>Check-out date: {currentuser.updated_at}</p>
                     <button className="btn btn-primary mb-2" onClick={handleLogout}>
                       Logout
                     </button>

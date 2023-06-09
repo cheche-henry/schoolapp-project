@@ -42,7 +42,7 @@ _course_title = params[:course_title]
   end
 
   delete '/applications/delete/:id' do
-    if session[:user_id]
+    
       application = Application.find_by(id: params[:id])
       if application
         application.destroy
@@ -52,11 +52,6 @@ _course_title = params[:course_title]
         status 404
         message = { error: "Application not found" }
       end
-    else
-      status 401
-      message = { error: "Not logged in" }
-    end
-
     message.to_json()
   end
 end
