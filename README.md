@@ -1,5 +1,3 @@
-Sure! Here's an example of a README.md file for your bootcamp website:
-
 # Cheche academy bootcamp wesite
 
 Welcome to the Bootcamp Website! This website provides a platform for users to explore and apply for available courses. Administrators can log in, review and approve/reject applications, add new users, and change account passwords.
